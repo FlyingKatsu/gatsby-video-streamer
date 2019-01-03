@@ -9,8 +9,22 @@
   },
   "dependencies": {
     "gatsby": "^2.0.82",
+    "gatsby-image": "^2.0.25",
+    "gatsby-plugin-google-analytics": "^2.0.8",
+    "gatsby-plugin-manifest": "^2.0.13",
+    "gatsby-plugin-offline": "^2.0.20",
+    "gatsby-plugin-react-helmet": "^3.0.5",
+    "gatsby-plugin-remark-collection": "^0.1.0",
+    "gatsby-plugin-sharp": "^2.0.17",
+    "gatsby-remark-copy-linked-files": "^2.0.8",
+    "gatsby-remark-images": "^3.0.1",
+    "gatsby-remark-responsive-iframe": "^2.0.8",
+    "gatsby-source-filesystem": "^2.0.12",
+    "gatsby-transformer-remark": "^2.1.19",
+    "gatsby-transformer-sharp": "^2.1.10",
     "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "react-helmet": "^5.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
@@ -37,7 +51,7 @@
     "url": "git+https://github.com/FlyingKatsu/gatsby-video-stream.git"
   },
   "scripts": {
-	"dev": "gatsby develop",
+    "dev": "gatsby develop",
     "develop": "gatsby develop",
     "start": "npm run develop",
     "debug": "DEBUG_MODE=true gatsby develop",
