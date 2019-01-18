@@ -9,7 +9,6 @@ class VideoPageTemplate extends React.Component {
 
     constructor(props) {
         super(props)
-        console.log(props)
     }
 
     getVideoPlayer(video,title,thumb) {
@@ -25,7 +24,7 @@ class VideoPageTemplate extends React.Component {
             )
         }
         return (
-            <video width={640} height={360} controls autoPlay playsinline>
+            <video width={640} height={360} controls autoPlay playsInline>
                 <source src={withPrefix(video.publicURL)} type={video.internal.mediaType} />
                 {`Your browser does not currently support the HTML5 <video> tag`}
             </video>
@@ -37,7 +36,7 @@ class VideoPageTemplate extends React.Component {
     const video = this.props.data.video;
     const dash = this.props.data.dash;
     const hls = this.props.data.hls;
-    const thumb = this.props.data.thumb; // TODO: create a component for rendering one thumb at a time
+    const thumb = this.props.data.thumbs.edges ? this.props.data.thumbs.edges[1].node : null; // TODO: create a component for rendering one thumb at a time
     const post = this.props.data.post;
 
     const videoDetail = {
@@ -141,15 +140,30 @@ query VideoBySlug($slug: String!, $name: String!, $avatar: String!) {
       relativeDirectory
       relativePath
     }
-    thumb: file(
-      sourceInstanceName: {eq: "thumb"}
-      relativeDirectory: {eq: $name}
+    thumbs: allFile(
+        filter: {
+          sourceInstanceName: {eq: "thumb"}
+          relativeDirectory: {eq: $name}
+        }
+        sort: {
+          fields: [internal___contentDigest]
+          order: ASC
+        }
+        skip: 1
+        limit: 4
       ) {
-      publicURL
+          edges {
+            node {
+              relativePath
+              publicURL
+              name
+              extension
+            }
+        }
     }
     post: markdownRemark(
         fields: { collection: {eq: "md-video-detail"} }
-        frontmatter: { name: {eq: $name} }
+        frontmatter: { video_name: {eq: $name} }
       ) {
         id
         excerpt(pruneLength: 160)
