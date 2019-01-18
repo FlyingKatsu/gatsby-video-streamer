@@ -24,9 +24,11 @@ module.exports = {
     },
 
     // Use these to specify the locations and names of files you want to query over
-    // NOTE: `ignore` patterns are used are similar to glob patterns
+    // NOTE 1: `ignore` patterns are used are similar to glob patterns
     // but it seems that negation does not work
-    // NOTE: `path` should be relative to the root directory
+    // NOTE 2: `path` should be relative to the root directory
+    // NOTE 3: If you do not need one of these patterns and choose to comment them out
+    // don't forget to comment out the appropriate lines in gatsby-node.js
     filesystem: [
         // Markdown files that should be turned into blog posts
         {
