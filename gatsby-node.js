@@ -6,14 +6,14 @@ const { siteMetadata } = require(`./site-config`);
 
 const { createBlogPages } = require(`./gatsby-create-page/blog.js`)
 const { createVideoPages } = require(`./gatsby-create-page/video.js`)
-//const { createPlaylistPages } = require(`./gatsby-node/create-page/playlist.js`)
+const { createPlaylistPages } = require(`./gatsby-create-page/playlist.js`)
 
 exports.createPages = ({ graphql, actions }) => {
     const { createPage } = actions
 
     return createBlogPages(graphql, createPage, siteMetadata.avatar)
         .then(() => { return createVideoPages(graphql, createPage, siteMetadata.avatar) })
-        //.then( () => { return createPlaylistPages(graphql, createPage, siteMetadata.avatar) } )
+        .then( () => { return createPlaylistPages(graphql, createPage, siteMetadata.avatar) } )
         .catch(console.error)
 }
 
