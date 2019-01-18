@@ -5,17 +5,20 @@ import Bio from '../component/Bio'
 import Layout from '../component/Layout'
 import SEO from '../component/SEO'
 
+import { externalPathDev, externalPathServ } from '../../site-config'
+
 class VideoPageTemplate extends React.Component {
 
     constructor(props) {
         super(props)
     }
 
-    getVideoPlayer(video,title,thumb) {
+    getVideoPlayer(video,title,thumbs) {
+        const thumbComp = (thumbs) ? thumbs.map( (thumb) => (<img src={withPrefix(thumb.node.publicURL)} width={320} height={180} />)) : ''
         if (['video/mp4','video/ogg','video/webm'].indexOf(video.internal.mediaType) < 0) {
             return (
                 <div>
-                    {(thumb) ? (<img src={withPrefix(thumb.publicURL)} width={640} height={360} />) : ''}
+                    <div>{thumbComp}</div>
                     <p>HTML5 Video player does not support the <b>.{video.extension}</b> file type, 
                         but you can still download the video to watch on your own video player:{' '}
                         <a href={withPrefix(video.publicURL)} title={`Download ${title} video`}>
@@ -24,20 +27,34 @@ class VideoPageTemplate extends React.Component {
             )
         }
         return (
-            <video width={640} height={360} controls autoPlay playsInline>
-                <source src={withPrefix(video.publicURL)} type={video.internal.mediaType} />
-                {`Your browser does not currently support the HTML5 <video> tag`}
-            </video>
+            <div>
+                <video width={640} height={360} controls autoPlay playsInline>
+                    <source src={withPrefix(video.publicURL)} type={video.internal.mediaType} />
+                    {`Your browser does not currently support the HTML5 <video> tag`}
+                </video>
+                <div>{thumbComp}</div>
+            </div>
         )
     }
 
   render () {
-    const site = this.props.data.site;
-    const video = this.props.data.video;
-    const dash = this.props.data.dash;
-    const hls = this.props.data.hls;
-    const thumb = this.props.data.thumbs.edges ? this.props.data.thumbs.edges[1].node : null; // TODO: create a component for rendering one thumb at a time
-    const post = this.props.data.post;
+    //const external = (location.hostname === 'localhost') ? `file://localhost/${externalPathDev}` : externalPathServ;
+    const external =  externalPathServ
+    const site = this.props.data.site
+    const video = this.props.data.video
+    const dash = this.props.data.dash
+    const hls = this.props.data.hls
+    const thumbs = this.props.data.thumbs ? this.props.data.thumbs.edges : null // TODO: create a component for rendering one thumb at a time
+    const post = this.props.data.post
+    const order = (post) ? post.frontmatter.thumb_order : []
+
+    const chosenThumbs = (order) ? 
+        order.reduce((acc,index) => {
+            if (thumbs[index-1]) {
+                acc.push(thumbs[index-1])
+            }
+            return acc
+        },[]) : ''
 
     const videoDetail = {
         title: 'Untitled',
@@ -61,7 +78,11 @@ class VideoPageTemplate extends React.Component {
         <SEO title={videoDetail.title} description={videoDetail.desc} />
         <h1>{videoDetail.title}</h1>
         <div>
-            {this.getVideoPlayer(video,videoDetail.title,thumb)}
+            {this.getVideoPlayer(video,videoDetail.title,chosenThumbs)}
+        </div>
+        <div>
+            <p>{(dash) ? <a href={`${external}/dash/${dash.relativePath}`}>Dash Stream</a> : 'No dash stream' }</p>
+            <p>{(hls) ? <a href={`${external}/hls/${hls.relativePath}`}>HLS Stream</a> : 'No hls stream' }</p>
         </div>
         <div dangerouslySetInnerHTML={videoDetail.content}></div>
         <hr/>
@@ -146,11 +167,9 @@ query VideoBySlug($slug: String!, $name: String!, $avatar: String!) {
           relativeDirectory: {eq: $name}
         }
         sort: {
-          fields: [internal___contentDigest]
+          fields: [name]
           order: ASC
         }
-        skip: 1
-        limit: 4
       ) {
           edges {
             node {
@@ -175,6 +194,7 @@ query VideoBySlug($slug: String!, $name: String!, $avatar: String!) {
           patreontier
           category
           tagged
+          thumb_order
         }
     }
   }

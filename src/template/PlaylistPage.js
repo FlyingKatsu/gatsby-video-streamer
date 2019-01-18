@@ -20,9 +20,10 @@ class PlaylistTemplate extends React.Component {
 
         const videos = post.frontmatter.videos.map((vid) => {
             const name = vid.frontmatter.video_name
+            const chosen = vid.frontmatter.thumb_order ? vid.frontmatter.thumb_order[0]-1 : 0
             return (
                 <li key={vid.id}><a href={`/video/${name}`}>
-                    {(thumbMap[name]) ? (<img src={withPrefix(thumbMap[name][1].node.publicURL)} width={320} height={180} />) : ''}
+                    {(thumbMap[name]) ? (<img src={withPrefix(thumbMap[name][chosen].node.publicURL)} width={320} height={180} />) : ''}
                     <p>{vid.frontmatter.title}</p>
                 </a></li>
             )
@@ -101,6 +102,7 @@ export const pageQuery = graphql`
             frontmatter {
                 title
                 video_name
+                thumb_order
             }
         }
       }
@@ -111,11 +113,9 @@ export const pageQuery = graphql`
           relativeDirectory: {in: $videos}
         }
         sort: {
-          fields: [internal___contentDigest]
+          fields: [name]
           order: ASC
         }
-        skip: 1
-        limit: 4
       ) {
         group(field: relativeDirectory) {
             fieldValue
