@@ -22,6 +22,16 @@ module.exports = {
       // Appears next to your profile image in the Bio component
       tagline: `Great videos for everyone`
     },
+    
+    // Mappings
+    // Maps the frontmatter of one markdown file to the frontmatter of another markdown file
+    // NOTE: the values of these frontmatter fields must be unique since they are used for identification
+    // ex: don't give two different files the same id
+    mapping: {
+        // playlist/VideoName.md videos : video-detail/VideoName.md video_name 
+        // (video_name should be the same as the mp4/md filenames and stream/thumb directories)
+        'MarkdownRemark.frontmatter.videos' : 'MarkdownRemark.frontmatter.video_name',
+    },
 
     // Use these to specify the locations and names of files you want to query over
     // NOTE 1: `ignore` patterns are used are similar to glob patterns

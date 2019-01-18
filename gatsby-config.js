@@ -17,6 +17,7 @@ const plugins = SiteConfig.filesystem.map( (pattern) => {
 module.exports = {
   pathPrefix: SiteConfig.pathPrefix,
   siteMetadata: SiteConfig.siteMetadata,
+  mapping: SiteConfig.mapping,
   plugins: plugins.concat([
     // https://www.gatsbyjs.org/packages/gatsby-transformer-remark/
     {
