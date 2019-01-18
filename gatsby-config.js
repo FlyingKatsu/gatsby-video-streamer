@@ -1,34 +1,23 @@
-module.exports = {
-  siteMetadata: {
-    title: `My Video Channel`,
-    author: `Username`,
-    description: `An index of videos shared by Username`,
-    siteUrl: `https://demo.flyingkatsu.com/video-stream`,
-    social: {
-      twitter: `username`
+const path = require('path')
+const SiteConfig = require(`./site-config`)
+
+const plugins = SiteConfig.filesystem.map( (pattern) => {
+    return {
+        // https://www.gatsbyjs.org/packages/gatsby-source-filesystem/
+        // enables the files in these specified paths to be turned into graphQL nodes
+        resolve: `gatsby-source-filesystem`,
+        options: {
+            name: pattern.name,
+            path: path.join(__dirname, pattern.path),
+            ignore: pattern.ignore
+        }
     }
-  },
-  plugins: [
-    // https://www.gatsbyjs.org/packages/gatsby-source-filesystem/
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${ __dirname }/content/blog`,
-        name: `blog`
-      }
-    }, {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${ __dirname }/content/asset`,
-        name: `asset`
-      }
-    }, {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${ __dirname }/content/video`,
-        name: `video`
-      }
-    },
+})
+
+module.exports = {
+  pathPrefix: SiteConfig.pathPrefix,
+  siteMetadata: SiteConfig.siteMetadata,
+  plugins: plugins.concat([
     // https://www.gatsbyjs.org/packages/gatsby-transformer-remark/
     {
       resolve: `gatsby-transformer-remark`,
@@ -94,5 +83,5 @@ module.exports = {
     // https://www.gatsbyjs.org/packages/gatsby-plugin-react-helmet/
     // For dynamic site metadata and other document head elements
     `gatsby-plugin-react-helmet`
-  ]
+  ])
 }
