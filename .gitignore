@@ -1,17 +1,9 @@
 ## == Specific to this project ==
 
-# Large files like videos
-*.mp4
-*.webm
-*.mp3
-*.mov
-*.avi
-*.mpg
-*.ogg
+# Config files that are not samples
+*config.*
+!*.sample.*
 
-# Stream Video Manifest files
-*.m3u8
-*.mpd
 
 ## == From Gatsby generated template ==
 
