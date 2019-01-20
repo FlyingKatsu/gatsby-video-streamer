@@ -1,4 +1,4 @@
-const { siteMetadata } = require(`./site-config`);
+const { siteMetadata, ignorePages } = require(`./site-config`);
 
 /**
  * Create pages from graphQL nodes
@@ -8,13 +8,25 @@ const { createBlogPages } = require(`./gatsby-create-page/blog.js`)
 const { createVideoPages } = require(`./gatsby-create-page/video.js`)
 const { createPlaylistPages } = require(`./gatsby-create-page/playlist.js`)
 
+const pageGen = {
+    blog: createBlogPages,
+    video: createVideoPages,
+    playlist: createPlaylistPages,
+}
+
 exports.createPages = ({ graphql, actions }) => {
     const { createPage } = actions
 
-    return createBlogPages(graphql, createPage, siteMetadata.avatar)
-        .then(() => { return createVideoPages(graphql, createPage, siteMetadata.avatar) })
-        .then( () => { return createPlaylistPages(graphql, createPage, siteMetadata.avatar) } )
-        .catch(console.error)
+    // Don't use the createXPages function if X is in ignorePages
+    const prunedGen = Object.keys(pageGen).reduce( (acc, path) => {
+        if (ignorePages.indexOf(path) < 0) acc.push(pageGen[path])
+        return acc;
+    }, [])
+
+    return Promise.all(prunedGen.map( (fn) => {
+        // Calls the createXPages function with these params
+        fn(graphql, createPage, siteMetadata.avatar)
+    } )).catch(console.error)
 }
 
 /**

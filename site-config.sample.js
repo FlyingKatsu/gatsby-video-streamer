@@ -33,12 +33,20 @@ module.exports = {
         'MarkdownRemark.frontmatter.videos' : 'MarkdownRemark.frontmatter.video_name',
     },
 
+    // IgnorePages
+    // Any name in this array will be excluded from page generation
+    // ex: 'blog' will tell gatsby not to generate /blog and /blog/my-post
+    ignorePages: [
+        //'blog'
+    ],
+
     // Use these to specify the locations and names of files you want to query over
     // NOTE 1: `ignore` patterns are used are similar to glob patterns
     // but it seems that negation does not work
     // NOTE 2: `path` should be relative to the root directory
-    // NOTE 3: If you do not need one of these patterns and choose to comment them out
-    // don't forget to comment out the appropriate lines in gatsby-node.js
+    // NOTE 3: If you do not need one of these patterns, just add its name to ignorePages above ^
+    // NOTE 4: If you want to add more than this, 
+    // modify gatsby-node.js and add the appropriate files to gatsby-create-page/
     filesystem: [
         // Markdown files that should be turned into blog posts
         {

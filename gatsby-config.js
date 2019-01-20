@@ -1,18 +1,22 @@
 const path = require('path')
 const SiteConfig = require(`./site-config`)
 
-const plugins = SiteConfig.filesystem.map( (pattern) => {
-    return {
-        // https://www.gatsbyjs.org/packages/gatsby-source-filesystem/
-        // enables the files in these specified paths to be turned into graphQL nodes
-        resolve: `gatsby-source-filesystem`,
-        options: {
-            name: pattern.name,
-            path: path.join(__dirname, pattern.path),
-            ignore: pattern.ignore
-        }
+const plugins = SiteConfig.filesystem.reduce( (acc,pattern) => {
+    if (SiteConfig.ignorePages.indexOf(pattern.name) < 0) {
+        // Only include data files of the pages we want
+        acc.push( {
+            // https://www.gatsbyjs.org/packages/gatsby-source-filesystem/
+            // enables the files in these specified paths to be turned into graphQL nodes
+            resolve: `gatsby-source-filesystem`,
+            options: {
+                name: pattern.name,
+                path: path.join(__dirname, pattern.path),
+                ignore: pattern.ignore
+            }
+        } )
     }
-})
+    return acc
+}, [])
 
 module.exports = {
   pathPrefix: SiteConfig.pathPrefix,
