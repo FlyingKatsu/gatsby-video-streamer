@@ -13,7 +13,7 @@ class VideoIndex extends React.Component {
         const thumbs = data.thumbs ? data.thumbs.edges : null // TODO: make component for rendering thumbnails
 
         return (
-            <Layout location={this.props.location} title={siteTitle}>
+            <Layout location={this.props.location} title={siteTitle} copyrightInfo={data.site.siteMetadata.copyrightInfo}>
                 <SEO
                     title="All videos"
                     keywords={[`video`, `gatsby`, `javascript`, `react`]}
@@ -45,6 +45,7 @@ export const pageQuery = graphql`
     site: site {
       siteMetadata {
         title
+        copyrightInfo
       }
     }
     avatar: file(relativePath: { eq: $avatar }) {

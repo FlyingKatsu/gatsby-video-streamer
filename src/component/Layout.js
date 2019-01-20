@@ -1,12 +1,10 @@
 import React from 'react'
 import { Link } from 'gatsby'
 
-const pathPrefix = ''
-
 class Layout extends React.Component {
   render () {
-    const { location, title, children } = this.props
-    const rootPath = `${ pathPrefix }/`
+    const { location, title, copyrightInfo, children } = this.props
+    const rootPath = `/`
     let header
 
     if (location.pathname === rootPath) {
@@ -31,9 +29,9 @@ class Layout extends React.Component {
         {header}
         {children}
         <footer>
-          Copyright © 2018 HeatPhoenix.
+          {copyrightInfo}
           {` `}
-          Built with <a href="https://www.gatsbyjs.org">Gatsby</a>
+          Built with <a href="https://github.com/FlyingKatsu/gatsby-video-streamer">gatsby-video-streamer</a>, a <a href="https://www.gatsbyjs.org">GatsbyJS</a> project.
         </footer>
       </div>
     )

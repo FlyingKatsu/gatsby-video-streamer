@@ -74,7 +74,7 @@ class VideoPageTemplate extends React.Component {
     const { slug, name, previous, next } = this.props.pageContext
 
     return (
-      <Layout location={this.props.location} title={siteTitle}>
+      <Layout location={this.props.location} title={siteTitle} copyrightInfo={site.siteMetadata.copyrightInfo}>
         <SEO title={videoDetail.title} description={videoDetail.desc} />
         <h1>{videoDetail.title}</h1>
         <div>
@@ -126,6 +126,7 @@ query VideoBySlug($slug: String!, $name: String!, $avatar: String!) {
         title
         author
         description
+        copyrightInfo
       }
     }
     avatar: file(relativePath: { eq: $avatar }) {

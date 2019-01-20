@@ -16,7 +16,6 @@ class PlaylistTemplate extends React.Component {
             acc[group.fieldValue] = group.edges
             return acc
         }, {}) : {}
-        console.log(thumbMap)
 
         const videos = post.frontmatter.videos.map((vid) => {
             const name = vid.frontmatter.video_name
@@ -30,7 +29,7 @@ class PlaylistTemplate extends React.Component {
         })
 
         return (
-            <Layout location={this.props.location} title={siteTitle}>
+            <Layout location={this.props.location} title={siteTitle} copyrightInfo={this.props.data.site.siteMetadata.copyrightInfo}>
                 <SEO title={post.frontmatter.title} description={post.excerpt} />
                 <h1>{post.frontmatter.title}</h1>
                 <div>
@@ -82,6 +81,7 @@ export const pageQuery = graphql`
       siteMetadata {
         title
         author
+        copyrightInfo
       }
     }
     avatar: file(relativePath: { eq: $avatar }) {

@@ -12,7 +12,7 @@ class BlogPostTemplate extends React.Component {
     const { previous, next } = this.props.pageContext
 
     return (
-      <Layout location={this.props.location} title={siteTitle}>
+      <Layout location={this.props.location} title={siteTitle} copyrightInfo={this.props.data.site.siteMetadata.copyrightInfo}>
         <SEO title={post.frontmatter.title} description={post.excerpt} />
         <h1>{post.frontmatter.title}</h1>
         <p>
@@ -59,6 +59,7 @@ export const pageQuery = graphql`
       siteMetadata {
         title
         author
+        copyrightInfo
       }
     }
     avatar: file(relativePath: { eq: $avatar }) {

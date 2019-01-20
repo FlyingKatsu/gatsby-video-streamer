@@ -5,20 +5,20 @@ import Bio from '../component/Bio'
 import Layout from '../component/Layout'
 import SEO from '../component/SEO'
 
-class VideoIndex extends React.Component {
+class BlogIndex extends React.Component {
   render () {
     const { data } = this.props
     const siteTitle = data.site.siteMetadata.title
-    const videos = data.allMarkdownRemark.edges
+    const posts = data.allMarkdownRemark.edges
 
     return (
-      <Layout location={this.props.location} title={siteTitle}>
+      <Layout location={this.props.location} title={siteTitle} copyrightInfo={data.site.siteMetadata.copyrightInfo}>
         <SEO
-          title="All videos"
-          keywords={[`video`, `gatsby`, `javascript`, `react`]}
+          title="All blog posts"
+          keywords={[`blog`, `gatsby`, `javascript`, `react`]}
         />
         <Bio avatar={data.avatar} />
-        {videos.map(({ node }) => {
+        {posts.map(({ node }) => {
           const title = node.frontmatter.title || node.fields.slug
           return (
             <div key={node.fields.slug}>
@@ -37,13 +37,14 @@ class VideoIndex extends React.Component {
   }
 }
 
-export default VideoIndex
+export default BlogIndex
 
 export const pageQuery = graphql`
   query getBlogIndex($avatar: String!){
     site {
       siteMetadata {
         title
+        copyrightInfo
       }
     }
     avatar: file(relativePath: { eq: $avatar }) {

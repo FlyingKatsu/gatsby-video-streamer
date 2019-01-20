@@ -20,7 +20,10 @@ module.exports = {
       // The file to use for your profile image in the Bio component
       avatar: `profile.png`,
       // Appears next to your profile image in the Bio component
-      tagline: `Great videos for everyone`
+      tagline: `Great videos for everyone`,
+
+      // Global copyright disclaimer
+      copyrightInfo: 'Copyright © 2019 Username. All rights reserved.',
     },
     
     // Mappings
