@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, graphql, withPrefix } from 'gatsby'
+import { Link, graphql } from 'gatsby'
 
 import Bio from '../component/Bio'
 import Layout from '../component/Layout'
@@ -21,10 +21,10 @@ class PlaylistTemplate extends React.Component {
             const name = vid.frontmatter.video_name
             const chosen = vid.frontmatter.thumb_order ? vid.frontmatter.thumb_order[0]-1 : 0
             return (
-                <li key={vid.id}><a href={`/video/${name}`}>
-                    {(thumbMap[name]) ? (<img src={withPrefix(thumbMap[name][chosen].node.publicURL)} width={320} height={180} />) : ''}
+                <li key={vid.id}><Link to={`/video/${name}`}>
+                    {(thumbMap[name]) ? (<img src={thumbMap[name][chosen].node.publicURL} width={320} height={180} />) : ''}
                     <p>{vid.frontmatter.title}</p>
-                </a></li>
+                </Link></li>
             )
         })
 

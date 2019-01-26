@@ -63,7 +63,6 @@ export const pageQuery = graphql`
       edges {
         node {
           extension
-          publicURL
           modifiedTime(formatString: "MMMM DD, YYYY")
           name
           fields {
