@@ -17,9 +17,6 @@ class Index extends React.Component {
                     keywords={[`video`, `gatsby`, `javascript`, `react`]}
                 />
                 <Bio avatar={data.avatar} />
-                <Link to='blog'>Blog</Link>
-                <Link to='video'>Videos</Link>
-                <Link to='playlist'>Playlists</Link>
             </Layout>
         )
     }

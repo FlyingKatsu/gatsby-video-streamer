@@ -27,6 +27,7 @@ class Layout extends React.Component {
     return (
       <div>
         {header}
+        <Link to='blog'>Blog</Link> | <Link to='video'>Videos</Link> | <Link to='playlist'>Playlists</Link>
         {children}
         <footer>
           {copyrightInfo}
