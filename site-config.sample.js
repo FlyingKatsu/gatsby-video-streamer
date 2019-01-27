@@ -8,6 +8,7 @@ module.exports = {
     siteMetadata: {
       // These are used for metadata like Twitter cards
       title: `My Video Channel`,
+      shortName: `MyVideo`,
       author: `Username`,
       description: `An index of videos shared by Username`,
       siteUrl: `https://demo.website.com/video-stream`,
@@ -17,7 +18,7 @@ module.exports = {
         twitter: `@username`
       },
 
-      // The file to use for your profile image in the Bio component
+      // The file to use for your profile image in the Bio component (located in content/asset/)
       avatar: `profile.png`,
       // Appears next to your profile image in the Bio component
       tagline: `Great videos for everyone`,
@@ -25,6 +26,26 @@ module.exports = {
       // Global copyright disclaimer
       copyrightInfo: 'Copyright © 2019 Username. All rights reserved.',
     },
+
+    googleAnalyticsID: null,
+
+    colors: {
+        background: `#5E5E66`,
+        light: `#9B9BA2`,
+        dark: `#1E1E26`,
+        theme: `#D32F2F`,
+    },
+
+    // Video Stream File Path
+    // Use this to specify the path to assets that require a specific directory structure
+    // and should not be cached due to their size
+    // absolute path must lead with `http` (when running `gatsby develop` or `gatsby serve`)
+    // You may want to have your files copied to your live server so you can reference them in development
+    // because Chrome will not allow the running dev server to use local files
+    externalPathDev: `https://demo.flyingkatsu.com/_stream`,
+    // relative to your server's webpage root (www/ or public_html/) (when running `gatsby build` and deploying)
+    // likely protected by htaccess to prevent hotlinking
+    externalPathServ: `/_stream`,
     
     // Mappings
     // Maps the frontmatter of one markdown file to the frontmatter of another markdown file
@@ -39,6 +60,7 @@ module.exports = {
     // IgnorePages
     // Any name in this array will be excluded from page generation
     // ex: 'blog' will tell gatsby not to generate /blog and /blog/my-post
+    // Pending PR https://github.com/gatsbyjs/gatsby/pull/11304
     ignorePages: [
         //'blog'
     ],

@@ -18,11 +18,28 @@ const plugins = SiteConfig.filesystem.reduce( (acc,pattern) => {
     return acc
 }, [])
 
+// Pending PR https://github.com/gatsbyjs/gatsby/pull/11304
+const ignorePagePatterns = SiteConfig.ignorePages.reduce( (acc,name) => {
+    return acc.push(`${name}.js`)
+}, [] )
+
 module.exports = {
   pathPrefix: SiteConfig.pathPrefix,
   siteMetadata: SiteConfig.siteMetadata,
   mapping: SiteConfig.mapping,
   plugins: plugins.concat([
+    // https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-plugin-page-creator
+    // Creates pages from JS files in src/pages or the provided path
+    {
+        resolve: `gatsby-plugin-page-creator`,
+        options: {
+            path: path.join(__dirname, `src/gen-pages`),
+            ignore: {
+                patterns: ignorePagePatterns,
+                options: { nocase: true }
+            }
+        }
+    },
     // https://www.gatsbyjs.org/packages/gatsby-transformer-remark/
     {
       resolve: `gatsby-transformer-remark`,
@@ -64,7 +81,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        // trackingId: `ADD YOUR TRACKING ID HERE`,
+        trackingId: SiteConfig.googleAnalyticsID,
       }
     },
     // https://www.gatsbyjs.org/packages/gatsby-plugin-manifest/
@@ -72,13 +89,14 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `My Video Channel`,
-        short_name: `Username`,
+        name: SiteConfig.siteMetadata.title,
+        short_name: SiteConfig.siteMetadata.shortName,
+        description: SiteConfig.siteMetadata.description,
         start_url: `/`,
-        background_color: `#ffffff`,
-        theme_color: `#663399`,
-        display: `minimal-ui`,
-        icon: `content/asset/profile.png`
+        background_color: SiteConfig.colors.background,
+        theme_color: SiteConfig.colors.theme,
+        display: `standalone`,
+        icon: `content/asset/${SiteConfig.siteMetadata.avatar}`
       }
     },
     // https://www.gatsbyjs.org/packages/gatsby-plugin-offline/
