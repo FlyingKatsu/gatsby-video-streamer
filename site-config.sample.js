@@ -126,26 +126,26 @@ module.exports = {
         // Image files to use for video thumbnails
         {
             name: NamingScheme.thumbnail,
-            path: `../content/img/thumb`
+            path: `content/img/thumb`
         },
         // Video files from which to make video pages
         {
             name: NamingScheme.video,
-            path: `../content/vid`,
+            path: `content/vid`,
             // don't want any subdirectories or fragmented mp4 files
             ignore: [`**/dash`, `**/hls`, `**/*\.frag\.*`, `**/*-frag\.*`]
         },
         // Video DASH stream files for the video player
         {
             name: NamingScheme.streamDASH,
-            path: `../content/vid/dash`,
+            path: `content/vid/dash`,
             // only want the generated .mpd file
             ignore: [`**/*\.m4s`, `**/*\.mp4`]
         },
         // Video HLS stream files for the video player
         {
             name: NamingScheme.streamHLS,
-            path: `../content/vid/hls`,
+            path: `content/vid/hls`,
             // only want the top level generated .m3u8 file
             // (media-1/ is default subdir made by bento4's mp42hls)
             ignore: [`**/*\.ts`, `**/media-1`]
