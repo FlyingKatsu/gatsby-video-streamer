@@ -34,6 +34,7 @@ exports.createPages = ({ graphql, actions }) => {
  */
 
 const { createFilePath } = require(`gatsby-source-filesystem`)
+const { getVideoDurationInSeconds } = require('get-video-duration')
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
     const { createNodeField } = actions
@@ -65,6 +66,14 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
         // page url will end with 'video/filename/'
         const relativeURL = createFilePath({ node, getNode });
         createNodeField({ node, name: 'slug', value: `/${NamingScheme.video}${relativeURL}` })
+        // get length of video in seconds
+        getVideoDurationInSeconds(`content/vid/${node.relativePath}`)
+            .then( duration =>
+                createNodeField({ node, name: 'duration', value: duration})
+            ).catch( err => {
+                console.error(err)
+                createNodeField({ node, name: 'duration', value: 0})
+            });
     }
 
     else {
