@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
+import StyleWrapper from './styled/StyleWrapper'
 
 class Layout extends React.Component {
   render () {
@@ -25,7 +26,7 @@ class Layout extends React.Component {
       )
     }
     return (
-      <div>
+      <StyleWrapper>
         {header}
         <Link to='blog'>Blog</Link> | <Link to='video'>Videos</Link> | <Link to='playlist'>Playlists</Link>
         {children}
@@ -34,7 +35,7 @@ class Layout extends React.Component {
           {` `}
           Built with <a href="https://github.com/FlyingKatsu/gatsby-video-streamer">gatsby-video-streamer</a>, a <a href="https://www.gatsbyjs.org">GatsbyJS</a> project.
         </footer>
-      </div>
+      </StyleWrapper>
     )
   }
 }

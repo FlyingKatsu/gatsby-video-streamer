@@ -76,6 +76,9 @@ module.exports = {
     // Nifty image manipulation with access via GraphQL
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
+    // Use styled components for easy CSS
+    // https://www.gatsbyjs.org/docs/styled-components/
+    `gatsby-plugin-styled-components`,
     // https://www.gatsbyjs.org/packages/gatsby-plugin-google-analytics/
     // Track activity via Google Analytics
     {
