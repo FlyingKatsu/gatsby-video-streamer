@@ -4,6 +4,11 @@
 *config.*
 !*.sample.*
 
+## Big Content Files
+content/vid/
+content/video/
+content/img/
+content/image/
 
 ## == From Gatsby generated template ==
 
