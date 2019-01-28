@@ -8,11 +8,7 @@ const query = `
     allFile(filter: { sourceInstanceName: { eq: "video" } }) {
         edges {
             node {
-                extension
-                dir
-                relativePath
                 name
-                base
                 fields {
                     slug
                 }

@@ -7,21 +7,11 @@ const query = `
 {
   allMarkdownRemark(
     filter: { fields: { collection: {eq: "playlist"} } }
-    limit: 10
   ) {
     edges {
       node {
         fields {
           slug
-        }
-        frontmatter {
-          title
-          videos {
-            frontmatter {
-                title
-                video_name
-            }
-          }
         }
       }
     }
@@ -55,8 +45,7 @@ exports.createPlaylistPages = (graphql, createPage, avatar) => {
                             slug: post.node.fields.slug,
                             previous,
                             next,
-                            avatar,
-                            videos: ['sample-video-name', 'BigBuckBunny']
+                            avatar
                         }
                     })
                 })

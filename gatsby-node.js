@@ -1,4 +1,4 @@
-const { siteMetadata, ignorePages, NamingScheme } = require(`./site-config`);
+const { siteMetadata, ignorePages, NamingScheme, frontmatterDefaults } = require(`./site-config`);
 
 /**
  * Create pages from graphQL nodes
@@ -48,6 +48,26 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
             // page url will end with 'playlist/filename/'
             const relativeURL = createFilePath({ node, getNode });
             createNodeField({ node, name: 'slug', value: `/${NamingScheme.playlist}${relativeURL}` })
+            // Set default fields from frontmatter
+            Object.keys(frontmatterDefaults.playlist).map(key => {
+                createNodeField({
+                    node,
+                    name: key,
+                    value: node.frontmatter ? node.frontmatter[key]
+                        || frontmatterDefaults.playlist[key] : frontmatterDefaults.playlist[key]
+                })
+            })
+        }
+        else if (node.fields.collection === NamingScheme.videoDetail) {
+            // Set default fields from frontmatter
+            Object.keys(frontmatterDefaults.video).map(key => {
+                createNodeField({
+                    node,
+                    name: key,
+                    value: (node.frontmatter) ? node.frontmatter[key] 
+                        || frontmatterDefaults.video[key] : frontmatterDefaults.video[key]
+                })
+            })
         }
         else if (node.fields.collection === NamingScheme.blog) {
             // page url will end with 'blog/filename/'
@@ -67,15 +87,18 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
         const relativeURL = createFilePath({ node, getNode });
         createNodeField({ node, name: 'slug', value: `/${NamingScheme.video}${relativeURL}` })
         // get length of video in seconds
-        getVideoDurationInSeconds(`content/vid/${node.relativePath}`)
-            .then( duration =>
-                createNodeField({ node, name: 'duration', value: duration})
-            ).catch( err => {
-                console.error(err)
-                createNodeField({ node, name: 'duration', value: 0})
-            });
+        if (node.relativePath) {
+            getVideoDurationInSeconds(`content/vid/${node.relativePath}`)
+                .then( duration =>
+                    createNodeField({ node, name: 'duration', value: duration})
+                ).catch( err => {
+                    console.error(err)
+                    createNodeField({ node, name: 'duration', value: 0})
+                });
+        } else {
+            createNodeField({ node, name: 'duration', value: 0})
+        }
     }
-
     else {
         // Don't need any pages for any other files, but if you want them:
         // page url will end with 'other/filename/'
