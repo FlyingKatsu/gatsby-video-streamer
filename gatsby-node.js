@@ -1,4 +1,4 @@
-const { siteMetadata, ignorePages } = require(`./site-config`);
+const { siteMetadata, ignorePages, NamingScheme } = require(`./site-config`);
 
 /**
  * Create pages from graphQL nodes
@@ -43,15 +43,15 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     // Markdown Files
     if (node.internal.type === `MarkdownRemark`) {
-        if (node.fields.collection === `playlist`) {
+        if (node.fields.collection === NamingScheme.playlist) {
             // page url will end with 'playlist/filename/'
             const relativeURL = createFilePath({ node, getNode });
-            createNodeField({ node, name: 'slug', value: `/playlist${relativeURL}` })
+            createNodeField({ node, name: 'slug', value: `/${NamingScheme.playlist}${relativeURL}` })
         }
-        else if (node.fields.collection === `blog`) {
+        else if (node.fields.collection === NamingScheme.blog) {
             // page url will end with 'blog/filename/'
             const relativeURL = createFilePath({ node, getNode });
-            createNodeField({ node, name: 'slug', value: `/blog${relativeURL}` })
+            createNodeField({ node, name: 'slug', value: `/${NamingScheme.blog}${relativeURL}` })
         }
         else {
             // Don't need any pages for any other markdown files, but if you want them:
@@ -61,10 +61,10 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
         }
     }
     // Other files
-    else if (node.sourceInstanceName === `video`) {
+    else if (node.sourceInstanceName === NamingScheme.video) {
         // page url will end with 'video/filename/'
         const relativeURL = createFilePath({ node, getNode });
-        createNodeField({ node, name: 'slug', value: `/video${relativeURL}` })
+        createNodeField({ node, name: 'slug', value: `/${NamingScheme.video}${relativeURL}` })
     }
 
     else {
@@ -73,7 +73,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
         // const relativeURL = createFilePath({ node, getNode });
         // createNodeField({ node, name: 'slug', value: `/other${relativeURL}` })
     }
-
 
 }
 
@@ -93,4 +92,129 @@ exports.onCreatePage = ({ page, actions }) => {
             avatar: siteMetadata.avatar,
         },
     })
+}
+
+/**
+ * Modify existing nodes for custom mappings
+ */
+
+exports.sourceNodes = ({ actions, getNodes, getNode }) => {
+    const { createNodeField } = actions
+
+    // THUMBNAILS
+    const thumbsOfVideos = {}
+    const thumbNodes = getNodes()
+        .filter( node => node.internal.type === "File" &&
+            node.sourceInstanceName === NamingScheme.thumbnail)
+        .sort( (a, b) => a.name - b.name )
+
+    thumbNodes.forEach( node => {
+        // Get associated markdown file
+        const videoNode = getNodes()
+            .find( vNode => vNode.internal.type === "MarkdownRemark" &&
+                vNode.fields.collection === NamingScheme.videoDetail &&
+                vNode.frontmatter.video_name === node.relativeDirectory)
+        if (videoNode) {
+            if ( !thumbsOfVideos[videoNode.id] ) {
+                thumbsOfVideos[videoNode.id] = [];
+            }
+            thumbsOfVideos[videoNode.id].push(node.id)
+        }
+    } )
+    
+    Object.entries(thumbsOfVideos)
+        .forEach( ([videoNodeId, thumbIds]) => {
+            createNodeField({
+                node: getNode(videoNodeId),
+                name: "thumbnails",
+                value: thumbIds
+            })
+        })
+
+    // VIDEO FILES
+    const filesOfVideos = {}
+    const fileNodes = getNodes()
+        .filter( node => node.internal.type === "File" &&
+            node.sourceInstanceName === NamingScheme.video)
+
+    fileNodes.forEach( node => {
+        // Get associated markdown file
+        const videoNode = getNodes()
+            .find( vNode => vNode.internal.type === "MarkdownRemark" &&
+                vNode.fields.collection === NamingScheme.videoDetail &&
+                vNode.frontmatter.video_name === node.name)
+        if (videoNode) {
+            const ext = (["ogg", "mp4", "webm"].indexOf(node.extension) > 0) ? 'websafe' : 'other'
+            if ( !filesOfVideos[videoNode.id] ) {
+                filesOfVideos[videoNode.id] = {};
+                if ( !filesOfVideos[videoNode.id][ext] ) {
+                    filesOfVideos[videoNode.id][ext] = []
+                }
+            }
+            filesOfVideos[videoNode.id][ext].push(node.id)
+            if (!videoNode.fields.slug) {
+                createNodeField({
+                    node: videoNode,
+                    name: `slug`,
+                    value: node.fields.slug
+                })
+            }
+            createNodeField({
+                node: node,
+                name: `detail`,
+                value: videoNode.id
+            })
+        }
+    } )
+    
+    Object.entries(filesOfVideos)
+        .forEach( ([videoNodeId, types]) => {
+            Object.entries(types).forEach( ([type, ids]) => {
+                createNodeField({
+                    node: getNode(videoNodeId),
+                    name: `video_${type}`,
+                    value: ids
+                })
+            } )
+        })
+
+    // DASH FILES
+    const dashNodes = getNodes()
+        .filter( node => node.internal.type === "File" &&
+            node.sourceInstanceName === NamingScheme.streamDASH)
+
+    dashNodes.forEach( node => {
+        // Get associated markdown file
+        const videoNode = getNodes()
+            .find( vNode => vNode.internal.type === "MarkdownRemark" &&
+                vNode.fields.collection === NamingScheme.videoDetail &&
+                vNode.frontmatter.video_name === node.relativeDirectory)
+        if (videoNode) {
+            createNodeField({
+                node: videoNode,
+                name: "video_dash",
+                value: node.id
+            })
+        }
+    } )
+
+    // HLS FILES
+    const hlsNodes = getNodes()
+        .filter( node => node.internal.type === "File" &&
+            node.sourceInstanceName === NamingScheme.streamHLS)
+
+    hlsNodes.forEach( node => {
+        // Get associated markdown file
+        const videoNode = getNodes()
+            .find( vNode => vNode.internal.type === "MarkdownRemark" &&
+                vNode.fields.collection === NamingScheme.videoDetail &&
+                vNode.frontmatter.video_name === node.relativeDirectory)
+        if (videoNode) {
+            createNodeField({
+                node: videoNode,
+                name: "video_hls",
+                value: node.id
+            })
+        }
+    } )
 }
