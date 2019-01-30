@@ -53,7 +53,7 @@ module.exports = {
     googleAnalyticsID: null,
 
     colors: {
-        background: `#5E5E66`,
+        background: `#DEDEDE`,
         light: `#9B9BA2`,
         dark: `#1E1E26`,
         theme: `#D32F2F`,
@@ -85,6 +85,29 @@ module.exports = {
         'MarkdownRemark.fields.video_dash' : 'File',
         'MarkdownRemark.fields.video_hls' : 'File',
         'File.fields.detail' : 'MarkdownRemark',
+    },
+
+    // Defaults for Markdown file data
+    frontmatterDefaults: {
+        playlist: {
+            title: `Untitled Playlist`,
+            description: ``,
+            name: ``,
+            videos: [],
+            tagged: [],
+            publish: false,
+            date: ``, // 2019-01-30
+        },
+        video: {
+            title: `Untitled Video`,
+            description: ``,
+            video_name: ``,
+            thumb_dir: ``,
+            thumb_order: [1], // 1-indexed
+            tagged: [],
+            publish: false,
+            date: ``, // 2019-01-30
+        }
     },
 
     // IgnorePages
