@@ -47,7 +47,6 @@ exports.createVideoPages = (graphql, createPage, avatar) => {
                         // context defines $vars passed into the page queries
                         context: {
                             slug: video.node.fields.slug,
-                            name: video.node.name,
                             previous,
                             next,
                             avatar
