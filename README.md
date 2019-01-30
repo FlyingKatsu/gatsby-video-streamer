@@ -3,7 +3,7 @@
 A GatsbyJS project that builds a static YouTube-like personal website from a directory of video files.
 
 - [Read the Docs](http://flyingkatsu.com/gatsby-video-streamer)
-- [Live Demo](https://video.flyingkatsu.com) (WIP)
+- [Live Demo](https://demo.flyingkatsu.com/video-stream) (WIP)
 
 ## Requirements
 
