@@ -42,7 +42,7 @@ module.exports = {
       },
 
       // The file to use for your profile image in the Bio component (located in content/asset/)
-      avatar: `profile.png`,
+      avatar: `avatar.png`,
       // Appears next to your profile image in the Bio component
       tagline: `Great videos for everyone`,
 
@@ -139,7 +139,7 @@ module.exports = {
         // Markdown files that add more information to video pages
         {
             name: NamingScheme.videoDetail,
-            path: `content/video-detail`
+            path: `content/detail`
         },
         // Any standard files you want to have queryable
         {
@@ -149,26 +149,26 @@ module.exports = {
         // Image files to use for video thumbnails
         {
             name: NamingScheme.thumbnail,
-            path: `content/img/thumb`
+            path: `content/thumb`
         },
         // Video files from which to make video pages
         {
             name: NamingScheme.video,
-            path: `content/vid`,
+            path: `content/video`,
             // don't want any subdirectories or fragmented mp4 files
             ignore: [`**/dash`, `**/hls`, `**/*\.frag\.*`, `**/*-frag\.*`]
         },
         // Video DASH stream files for the video player
         {
             name: NamingScheme.streamDASH,
-            path: `content/vid/dash`,
+            path: `content/video/dash`,
             // only want the generated .mpd file
             ignore: [`**/*\.m4s`, `**/*\.mp4`]
         },
         // Video HLS stream files for the video player
         {
             name: NamingScheme.streamHLS,
-            path: `content/vid/hls`,
+            path: `content/video/hls`,
             // only want the top level generated .m3u8 file
             // (media-1/ is default subdir made by bento4's mp42hls)
             ignore: [`**/*\.ts`, `**/media-1`]
