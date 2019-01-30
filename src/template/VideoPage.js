@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link, graphql } from 'gatsby'
-import OpenPlayer from 'openplayerjs'
 
 import Bio from '../component/Bio'
 import Layout from '../component/Layout'
@@ -11,11 +10,15 @@ import { externalPathDev, externalPathServ } from '../../site-config'
 //const external = (location.hostname === 'localhost') ? `file://localhost/${externalPathDev}` : externalPathServ;
 const external =  externalPathDev
 
+if (typeof window !== `undefined`) {
+    const OpenPlayer = require('openplayerjs')
+}
+
 class VideoPageTemplate extends React.Component {
 
     constructor(props) {
         super(props)
-        this.playable = this.props.data.video.fields.detail.fields.video_websafe
+        this.playable = (this.props.data.video.fields.detail && this.props.data.video.fields.detail.fields.video_websafe)
     }
 
     getVideoPlayer(video,title,thumbs) {
@@ -79,7 +82,7 @@ class VideoPageTemplate extends React.Component {
     const post = this.props.data.video.fields.detail
     const siteTitle = site.siteMetadata.title
     const { previous, next } = this.props.pageContext
-    const chosenThumbs = (post.fields.thumbnails != null) ? post.fields.thumb_order
+    const chosenThumbs = (post != null && post.fields.thumbnails != null) ? post.fields.thumb_order
         .reduce((acc,index) => {
             const i = (index-1 < post.fields.thumbnails.length) ? index-1 : 0
             const thumb = post.fields.thumbnails[i]
