@@ -28,19 +28,21 @@ class PlaylistIndex extends React.Component {
             count={3}
           >
             {node.frontmatter.videos? node.frontmatter.videos.map( (video,index) => {
-              const vfiles = video.fields.video_websafe || video.fields.video_other
-              const vfile = vfiles.length > 0 ? vfiles[0] : {fields: {}}
-              const thumbs = video.fields.thumbnails || []
-              const thumbIndex = video.fields.thumb_order[0] - 1 || 0
-              return (
-                <FullThumb key={index}
-                  title={video.fields.title || video.fields.slug}
-                  link={ {path: video.fields.slug, name: ``} }
-                  image={thumbs[thumbIndex]}
-                  timeSince={video.frontmatter.date || vfile.mtime}
-                  duration={vfile.fields.duration || 0}
-                />
-              )
+                if (video) {
+                    const vfiles = video.fields.video_websafe || video.fields.video_other
+                    const vfile = (vfiles && vfiles.length) > 0 ? vfiles[0] : {fields: {}}
+                    const thumbs = video.fields.thumbnails || []
+                    const thumbIndex = video.fields.thumb_order[0] - 1 || 0
+                    return (
+                        <FullThumb key={index}
+                        title={video.fields.title || video.fields.slug}
+                        link={ {path: video.fields.slug, name: ``} }
+                        image={thumbs[thumbIndex]}
+                        timeSince={video.frontmatter.date || vfile.mtime}
+                        duration={vfile.fields.duration || 0}
+                        />
+                    )
+                }
             }) : ''}
           </HorizontalList>
         )) : ''}
