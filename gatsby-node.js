@@ -145,7 +145,7 @@ exports.sourceNodes = ({ actions, getNodes, getNode }) => {
         const videoNode = getNodes()
             .find( vNode => vNode.internal.type === "MarkdownRemark" &&
                 vNode.fields.collection === NamingScheme.videoDetail &&
-                vNode.frontmatter.video_name === node.relativeDirectory)
+                vNode.frontmatter.thumb_dir === node.relativeDirectory)
         if (videoNode) {
             if ( !thumbsOfVideos[videoNode.id] ) {
                 thumbsOfVideos[videoNode.id] = [];

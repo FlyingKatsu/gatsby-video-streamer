@@ -15,12 +15,13 @@ class VideoPageTemplate extends React.Component {
 
     constructor(props) {
         super(props)
+        this.playable = this.props.data.video.fields.detail.fields.video_websafe
     }
 
     getVideoPlayer(video,title,thumbs) {
 
-        const thumbComp = thumbs[0].image ? <Image fixed={this.props.image.childImageSharp.fixed} /> : ''
-        if (!video.fields.detail.fields.video_websafe) {
+        const thumbComp = (thumbs != null && thumbs[0].image) ? <Image fixed={this.props.image.childImageSharp.fixed} /> : ''
+        if (!this.playable) {
             return (
                 <div>
                     <div>{thumbComp}</div>
@@ -36,14 +37,18 @@ class VideoPageTemplate extends React.Component {
         return (
             <div>
                 <video id={'videoPlayer'} className={`op-player op-player__media`} width={640} height={360} controls playsInline>
-                    {(false) ? 
+                    {(video.fields.detail.fields.video_dash) ? 
                       <source src={`${external}/dash/${video.fields.detail.fields.video_dash.relativePath}`}
                         type='application/dash+xml'/> : ``}
-                    {(false) ? 
+                    {(video.fields.detail.fields.video_hls) ? 
                       <source src={`${external}/hls/${video.fields.detail.fields.video_hls.relativePath}`}
                         type='application/x-mpegURL'/> : ``}
-                    <source src='https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8' type='application/x-mpegURL' />
-                    {(false) ? <source src={`${external}/${video.relativePath}`} type={video.internal.mediaType} /> : ''}
+                    {(video.fields.detail.fields.title === `Big Buck Bunny`) ? 
+                        <source src='https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8' type='application/x-mpegURL' />
+                        : ''}
+                    {(video.fields.detail.fields.video_websafe) ? 
+                        <source src={`${external}/${video.fields.detail.fields.video_websafe[0].relativePath}`}
+                          type={video.fields.detail.fields.video_websafe[0].internal.mediaType} /> : ''}
                     {`Your browser does not currently support the HTML5 <video> tag`}
                 </video>
                 <div>{thumbComp}</div>
@@ -74,7 +79,7 @@ class VideoPageTemplate extends React.Component {
     const post = this.props.data.video.fields.detail
     const siteTitle = site.siteMetadata.title
     const { previous, next } = this.props.pageContext
-    const chosenThumbs = post.fields.thumb_order
+    const chosenThumbs = (post.fields.thumbnails != null) ? post.fields.thumb_order
         .reduce((acc,index) => {
             const i = (index-1 < post.fields.thumbnails.length) ? index-1 : 0
             const thumb = post.fields.thumbnails[i]
@@ -82,7 +87,7 @@ class VideoPageTemplate extends React.Component {
                 acc.push(thumb)
             }
             return acc
-        },[])
+        },[]) : null
 
     const videoDetail = {
         title: 'Untitled',
@@ -92,7 +97,7 @@ class VideoPageTemplate extends React.Component {
 
     if (post) {
         videoDetail.title = post.fields.title || videoDetail.title
-        videoDetail.desc = post.fields.decription || `${videoDetail.title} ${videoDetail.desc}`
+        videoDetail.desc = post.fields.description || `${videoDetail.title} ${videoDetail.desc}`
         videoDetail.content = {__html: post.html} || videoDetail.content
     }
 
@@ -108,10 +113,6 @@ class VideoPageTemplate extends React.Component {
         <h1>{videoDetail.title}</h1>
         <div>
             {this.getVideoPlayer(video,videoDetail.title,chosenThumbs)}
-        </div>
-        <div>
-            <p>{(video.fields.detail.fields.video_dash) ? <a href={`${external}/dash/${video.fields.detail.fields.video_dash.relativePath}`}>Dash Stream</a> : 'No dash stream' }</p>
-            <p>{(video.fields.detail.fields.video_hls) ? <a href={`${external}/hls/${video.fields.detail.fields.video_hls.relativePath}`}>HLS Stream</a> : 'No hls stream' }</p>
         </div>
         <div dangerouslySetInnerHTML={videoDetail.content}></div>
         <hr/>
@@ -178,6 +179,7 @@ query VideoBySlug($slug: String!, $avatar: String!) {
           slug
           duration
           detail {
+            html
             frontmatter {
               date(formatString: "MMMM DD, YYYY")
               tagged
@@ -191,13 +193,6 @@ query VideoBySlug($slug: String!, $avatar: String!) {
                 publicURL
               }
               video_websafe {
-                extension
-                internal {
-                  mediaType
-                }
-                relativePath
-              }
-              video_other {
                 extension
                 internal {
                   mediaType

@@ -103,12 +103,6 @@ export const pageQuery = graphql`
                     duration
                   }
                 }
-                video_other {
-                  mtime(fromNow: true)
-                  fields {
-                    duration
-                  }
-                }
               }
             }
           }
