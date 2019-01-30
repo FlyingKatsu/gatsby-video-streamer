@@ -55,13 +55,17 @@ class HorizontalList extends React.Component {
             <StyleLink><Link to={this.props.link.path}>{this.props.link.name}</Link></StyleLink>
         </Header>
         <Container>
-            <Button style={{right:'40%'}}>{'<'} Prev</Button>
+            {
+            //<Button style={{right:'40%'}}>{'<'} Prev</Button>
+            }
             <List>
                 {this.props.children ? this.props.children.map( (child,index) => (
                     <ListItem key={index}>{child}</ListItem>
                 )) : ''}
             </List>
-            <Button style={{left:'40%'}}>Next {'>'}</Button>
+            {
+            //<Button style={{left:'40%'}}>Next {'>'}</Button>
+            }
         </Container>
       </Wrapper>
     )
