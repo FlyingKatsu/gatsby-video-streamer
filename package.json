@@ -25,6 +25,7 @@
     "gatsby-transformer-remark": "^2.1.19",
     "gatsby-transformer-sharp": "^2.1.10",
     "get-video-duration": "^1.0.3",
+    "openplayerjs": "^1.7.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-helmet": "^5.2.0",

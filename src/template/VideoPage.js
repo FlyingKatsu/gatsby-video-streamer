@@ -1,13 +1,15 @@
 import React from 'react'
 import { Link, graphql } from 'gatsby'
+import OpenPlayer from 'openplayerjs'
 
 import Bio from '../component/Bio'
 import Layout from '../component/Layout'
+import CustomHead from '../component/CustomHead'
 import SEO from '../component/SEO'
 
 import { externalPathDev, externalPathServ } from '../../site-config'
 //const external = (location.hostname === 'localhost') ? `file://localhost/${externalPathDev}` : externalPathServ;
-const external =  externalPathServ
+const external =  externalPathDev
 
 class VideoPageTemplate extends React.Component {
 
@@ -16,8 +18,9 @@ class VideoPageTemplate extends React.Component {
     }
 
     getVideoPlayer(video,title,thumbs) {
-        const thumbComp = (thumbs) ? thumbs.map( (thumb) => (<img src={thumb.node.publicURL} width={320} height={180} />)) : ''
-        if (['video/mp4','video/ogg','video/webm'].indexOf(video.internal.mediaType) < 0) {
+
+        const thumbComp = thumbs[0].image ? <Image fixed={this.props.image.childImageSharp.fixed} /> : ''
+        if (!video.fields.detail.fields.video_websafe) {
             return (
                 <div>
                     <div>{thumbComp}</div>
@@ -28,10 +31,19 @@ class VideoPageTemplate extends React.Component {
                 </div>
             )
         }
+        // <source src='https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd' type='application/dash+xml'></source>
+        // <source src='https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8' type='application/x-mpegURL' />
         return (
             <div>
-                <video width={640} height={360} controls autoPlay playsInline>
-                    <source src={`${external}/${video.relativePath}`} type={video.internal.mediaType} />
+                <video id={'videoPlayer'} className={`op-player op-player__media`} width={640} height={360} controls playsInline>
+                    {(false) ? 
+                      <source src={`${external}/dash/${video.fields.detail.fields.video_dash.relativePath}`}
+                        type='application/dash+xml'/> : ``}
+                    {(false) ? 
+                      <source src={`${external}/hls/${video.fields.detail.fields.video_hls.relativePath}`}
+                        type='application/x-mpegURL'/> : ``}
+                    <source src='https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8' type='application/x-mpegURL' />
+                    {(false) ? <source src={`${external}/${video.relativePath}`} type={video.internal.mediaType} /> : ''}
                     {`Your browser does not currently support the HTML5 <video> tag`}
                 </video>
                 <div>{thumbComp}</div>
@@ -39,22 +51,38 @@ class VideoPageTemplate extends React.Component {
         )
     }
 
+  componentDidMount() {
+    // playerID, [advert URLs], fullScreenDefault, options
+    const player = new OpenPlayer('videoPlayer', null, false, {
+        // hidePlayBtnTimer: 350,
+        // step: 0.05,
+        startVolume: 0.5,
+        startTime: 0,
+        // ads: { url, debug },
+        // hls: { /*options https://github.com/video-dev/hls.js/blob/master/docs/API.md#fine-tuning*/ }
+        // dash: { /*options*/ }
+        hls: {
+            startLevel: -1
+        }
+    })
+    player.init()
+  }
+
   render () {
     const site = this.props.data.site
     const video = this.props.data.video
-    const dash = this.props.data.dash
-    const hls = this.props.data.hls
-    const thumbs = this.props.data.thumbs ? this.props.data.thumbs.edges : null // TODO: create a component for rendering one thumb at a time
-    const post = this.props.data.post
-    const order = (post) ? post.frontmatter.thumb_order : []
-
-    const chosenThumbs = (order) ? 
-        order.reduce((acc,index) => {
-            if (thumbs[index-1]) {
-                acc.push(thumbs[index-1])
+    const post = this.props.data.video.fields.detail
+    const siteTitle = site.siteMetadata.title
+    const { previous, next } = this.props.pageContext
+    const chosenThumbs = post.fields.thumb_order
+        .reduce((acc,index) => {
+            const i = (index-1 < post.fields.thumbnails.length) ? index-1 : 0
+            const thumb = post.fields.thumbnails[i]
+            if (thumb) {
+                acc.push(thumb)
             }
             return acc
-        },[]) : ''
+        },[])
 
     const videoDetail = {
         title: 'Untitled',
@@ -63,26 +91,27 @@ class VideoPageTemplate extends React.Component {
     }
 
     if (post) {
-        if (post.frontmatter) {
-            videoDetail.title = post.frontmatter.title || videoDetail.title
-            videoDetail.desc = post.frontmatter.decription || `${videoDetail.title} ${videoDetail.desc}`
-        }
+        videoDetail.title = post.fields.title || videoDetail.title
+        videoDetail.desc = post.fields.decription || `${videoDetail.title} ${videoDetail.desc}`
         videoDetail.content = {__html: post.html} || videoDetail.content
     }
 
-    const siteTitle = site.siteMetadata.title
-    const { slug, name, previous, next } = this.props.pageContext
-
     return (
       <Layout location={this.props.location} title={siteTitle} copyrightInfo={site.siteMetadata.copyrightInfo}>
-        <SEO title={videoDetail.title} description={videoDetail.desc} />
+        {
+            //<SEO title={videoDetail.title} description={videoDetail.desc} />
+        }
+        <CustomHead>
+            <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/openplayerjs@1.7.0/dist/openplayer.min.css' />
+        </CustomHead>
+        
         <h1>{videoDetail.title}</h1>
         <div>
             {this.getVideoPlayer(video,videoDetail.title,chosenThumbs)}
         </div>
         <div>
-            <p>{(dash) ? <a href={`${external}/dash/${dash.relativePath}`}>Dash Stream</a> : 'No dash stream' }</p>
-            <p>{(hls) ? <a href={`${external}/hls/${hls.relativePath}`}>HLS Stream</a> : 'No hls stream' }</p>
+            <p>{(video.fields.detail.fields.video_dash) ? <a href={`${external}/dash/${video.fields.detail.fields.video_dash.relativePath}`}>Dash Stream</a> : 'No dash stream' }</p>
+            <p>{(video.fields.detail.fields.video_hls) ? <a href={`${external}/hls/${video.fields.detail.fields.video_hls.relativePath}`}>HLS Stream</a> : 'No hls stream' }</p>
         </div>
         <div dangerouslySetInnerHTML={videoDetail.content}></div>
         <hr/>
@@ -120,7 +149,7 @@ class VideoPageTemplate extends React.Component {
 export default VideoPageTemplate
 
 export const pageQuery = graphql`
-query VideoBySlug($slug: String!, $name: String!, $avatar: String!) {
+query VideoBySlug($slug: String!, $avatar: String!) {
     site {
       siteMetadata {
         title
@@ -129,74 +158,61 @@ query VideoBySlug($slug: String!, $name: String!, $avatar: String!) {
         copyrightInfo
       }
     }
-    avatar: file(relativePath: { eq: $avatar }) {
-        childImageSharp {
-          fixed(width: 50, height: 50) {
-            ...GatsbyImageSharpFixed
+    avatar: file(relativePath: {eq: $avatar}) {
+      childImageSharp {
+        fixed(width: 50, height: 50) {
+          ...GatsbyImageSharpFixed
+        }
+      }
+    }
+    video: file(fields: {slug: {eq: $slug}}) {
+        extension
+        modifiedTime(formatString: "MMMM DD, YYYY")
+        name
+        prettySize
+        relativePath
+        internal {
+          mediaType
+        }
+        fields {
+          slug
+          duration
+          detail {
+            frontmatter {
+              date(formatString: "MMMM DD, YYYY")
+              tagged
+              description
+            }
+            fields {
+              title
+              slug
+              thumb_order
+              thumbnails {
+                publicURL
+              }
+              video_websafe {
+                extension
+                internal {
+                  mediaType
+                }
+                relativePath
+              }
+              video_other {
+                extension
+                internal {
+                  mediaType
+                }
+                relativePath
+              }
+              video_dash {
+                relativePath
+              }
+              video_hls {
+                relativePath
+              }
+            }
           }
         }
       }
-    video: file(fields: {slug: {eq: $slug}}) {
-      extension
-      modifiedTime(formatString: "MMMM DD, YYYY")
-      name
-      prettySize
-      relativePath
-      internal {
-          mediaType
-      }
-    }
-    dash: file(
-      sourceInstanceName: {eq: "vid-dash"}
-      relativeDirectory: {eq: $name}
-    ) {
-      base
-      relativeDirectory
-      relativePath
-    }
-    hls: file(
-      sourceInstanceName: {eq: "vid-hls"}
-      relativeDirectory: {eq: $name}
-    ) {
-      base
-      relativeDirectory
-      relativePath
-    }
-    thumbs: allFile(
-        filter: {
-          sourceInstanceName: {eq: "thumb"}
-          relativeDirectory: {eq: $name}
-        }
-        sort: {
-          fields: [name]
-          order: ASC
-        }
-      ) {
-          edges {
-            node {
-              relativePath
-              publicURL
-              name
-              extension
-            }
-        }
-    }
-    post: markdownRemark(
-        fields: { collection: {eq: "md-video-detail"} }
-        frontmatter: { video_name: {eq: $name} }
-      ) {
-        id
-        excerpt(pruneLength: 160)
-        html
-        frontmatter {
-          title
-          date(formatString: "MMMM DD, YYYY")
-          publish
-          patreontier
-          category
-          tagged
-          thumb_order
-        }
-    }
-  }
+  }  
 `
