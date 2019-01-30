@@ -10,7 +10,7 @@ class Bio extends React.Component {
                 render={data => {
                     const { author, social, tagline } = data.site.siteMetadata
                     return (
-                        <div>
+                        <div id={`bio`}>
                             {<Image
                                 fixed={this.props.avatar.childImageSharp.fixed}
                                 alt={author}

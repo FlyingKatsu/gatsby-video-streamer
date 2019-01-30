@@ -13,7 +13,7 @@ html, body {
 body {
     color: ${props => (props.whiteColor ? 'white' : 'black')};
     font-family: ${props => props.theme.fontFamily};
-    background-color: ${props => props.theme.colors.background} 
+    background-color: ${props => props.theme.colors.background};
 }
 .markdown-body {
     text-align: left;
@@ -21,6 +21,46 @@ body {
     padding: 1em;
     width: 32em;
     background-color: rgba(255,255,255,0.2)
+}
+#bio {
+    padding: 1em;
+}
+header.top {
+    padding: 1em 0;
+    background-color: ${props => props.theme.colors.dark};
+    color: white;
+}
+header.top a, header.top a:visited, a, a:visited {
+    color: white;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+header.top a:hover, a, a:visited {
+    color: ${props => props.theme.colors.theme};
+}
+header.top h1 {
+    margin: none;
+    text-align: left;
+    display: inline-block;
+    vertical-align: middle;
+    width: 60%;
+    font-size: 1.5em;
+}
+header.top p {
+    margin: none;
+    text-align: right;
+    display: inline-block;
+    vertical-align: middle;
+    width: 20%;
+    font-size: 1.25em;
+}
+footer {
+    padding: 4em 0;
+    border-top: 1px solid white;
+    background-color: ${props => props.theme.colors.dark};
+    color: white; 
 }
 `
 
