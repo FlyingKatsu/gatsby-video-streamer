@@ -90,7 +90,7 @@ export const pageQuery = graphql`
                 thumb_order
                 thumbnails {
                   childImageSharp {
-                    fixed(width: 320, height: 180) {
+                    fixed(width: 256, height: 144) {
                       ...GatsbyImageSharpFixed
                     }
                   }
