@@ -1,16 +1,21 @@
-| [GitHub Repo](https://github.com/FlyingKatsu/gatsby-video-streamer) | [Live Demo](https://video.flyingkatsu.com) |
+| [GitHub Repo](https://github.com/FlyingKatsu/gatsby-video-streamer) | [Live Demo](https://demo.flyingkatsu.com/video-stream) |
 
 # File System
 
 ## Development Files
 
 ```
-external/path/tocontent/
-
 gatsby-video-streamer/
     .env
     .gitignore
     package.json
+    content/
+        blog/
+        detail/
+        playlist/
+        video/
+            dash/
+            hls/
     docs/
     src/
     gatsby-create-page/
