@@ -108,13 +108,14 @@ class VideoPageTemplate extends React.Component {
         }
         <CustomHead>
             <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/openplayerjs@1.7.0/dist/openplayer.min.css' />
+            <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css' />
         </CustomHead>
         
         <h1>{videoDetail.title}</h1>
         <div>
             {this.getVideoPlayer(video,videoDetail.title,chosenThumbs)}
         </div>
-        <div dangerouslySetInnerHTML={videoDetail.content}></div>
+        <div className={`markdown-body`} dangerouslySetInnerHTML={videoDetail.content}></div>
         <hr/>
         <Bio avatar={this.props.data.avatar}/>
 

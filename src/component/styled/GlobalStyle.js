@@ -15,6 +15,13 @@ body {
     font-family: ${props => props.theme.fontFamily};
     background-color: ${props => props.theme.colors.background} 
 }
+.markdown-body {
+    text-align: left;
+    margin: 0 auto;
+    padding: 1em;
+    width: 32em;
+    background-color: rgba(255,255,255,0.2)
+}
 `
 
 export default GlobalStyle

@@ -15,7 +15,7 @@ const StyleWrapper = ({ children }) => (
   }}>
       <Wrapper>
         <GlobalStyle 
-            whiteColor={true}
+            whiteColor={false}
         />
         {children}
     </Wrapper>
