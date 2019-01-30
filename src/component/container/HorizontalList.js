@@ -51,8 +51,8 @@ class HorizontalList extends React.Component {
     return (
       <Wrapper>
         <Header>
-            <Heading>{this.props.title}</Heading>
-            <StyleLink><Link to={this.props.link.path}>{this.props.link.name}</Link></StyleLink>
+            {(this.props.title) ? <Heading>{this.props.title}</Heading> : ''}
+            {(this.props.link) ? <StyleLink><Link to={this.props.link.path}>{this.props.link.name}</Link></StyleLink> : ''}
         </Header>
         <Container>
             {

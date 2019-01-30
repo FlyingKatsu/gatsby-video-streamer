@@ -12,6 +12,7 @@ const query = `
       node {
         fields {
           slug
+          title
         }
       }
     }
