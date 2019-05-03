@@ -18,7 +18,9 @@ const plugins = SiteConfig.filesystem.reduce( (acc,pattern) => {
     return acc
 }, [])
 
-// Pending PR https://github.com/gatsbyjs/gatsby/pull/11304
+// As of PR https://github.com/gatsbyjs/gatsby/pull/11304
+// you can use glob patterns to ignore matching files
+// The following assumes SiteConfig.ignorePages only lists filenames of JS files in src/gen-pages
 const ignorePagePatterns = SiteConfig.ignorePages.reduce( (acc,name) => {
     return acc.push(`${name}.js`)
 }, [] )

@@ -113,7 +113,7 @@ module.exports = {
     // IgnorePages
     // Any name in this array will be excluded from page generation
     // ex: NamingScheme.blog will tell gatsby not to generate /blog and /blog/my-post
-    // Pending PR https://github.com/gatsbyjs/gatsby/pull/11304
+    // See gatsby-config.js if you want more fine-tuned control over this
     ignorePages: [
         // NamingScheme.blog
     ],
