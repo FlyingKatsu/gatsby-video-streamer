@@ -68,6 +68,12 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
                         || frontmatterDefaults.video[key] : frontmatterDefaults.video[key]
                 })
             })
+            // Create stubs for custom fields (to avoid unwanted errors)
+            createNodeField({ node, name: 'video_dash', value: 0})
+            createNodeField({ node, name: 'video_hls', value: 0})
+            createNodeField({ node, name: 'video_websafe', value: 0})
+            createNodeField({ node, name: 'video_other', value: 0})
+            createNodeField({ node, name: 'thumbnails', value: 0})
         }
         else if (node.fields.collection === NamingScheme.blog) {
             // page url will end with 'blog/filename/'
