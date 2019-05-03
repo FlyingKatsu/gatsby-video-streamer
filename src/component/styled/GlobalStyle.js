@@ -48,7 +48,7 @@ header.top h1 {
     width: 60%;
     font-size: 1.5em;
 }
-header.top p {
+header.top ol {
     margin: none;
     text-align: right;
     display: inline-block;

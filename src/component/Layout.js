@@ -1,6 +1,15 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import StyleWrapper from './styled/StyleWrapper'
+import styled from 'styled-components'
+import { NamingScheme, NavTitles, ignorePages } from '../../site-config'
+
+const NavBarLink = styled.li`
+    list-style-type: none;
+    display: inline-block;
+    font-size: 1.25em;
+    margin: 0 0.5em;
+`
 
 class Layout extends React.Component {
   render () {
@@ -14,7 +23,14 @@ class Layout extends React.Component {
                     {title}
                 </Link>
             </h1>
-            <p><Link to='blog'>Blog</Link> | <Link to='video'>Videos</Link> | <Link to='playlist'>Playlists</Link></p>
+            <ol className='navbar'>{
+                // If the page is not ignored, create a link to it for the nav bar
+                Object.keys(NavTitles).map( (e) => {
+                    if (ignorePages.indexOf(NamingScheme[e]) < 0) {
+                        return (<NavBarLink><Link to={NamingScheme[e]}>{NavTitles[e]}</Link></NavBarLink>)
+                    }
+                })
+            }</ol>
           </header>
         {children}
         <footer>

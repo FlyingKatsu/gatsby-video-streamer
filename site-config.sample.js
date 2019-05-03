@@ -19,8 +19,15 @@ const NamingScheme = {
     thumbnail: `thumb`,
 }
 
+const NavTitles = {
+    blog: "Blog",
+    video: "Videos",
+    playlist: "Playlists",
+}
+
 module.exports = {
     NamingScheme,
+    NavTitles,
 
     // If the site will be hosted in a subdirectory like www/pathPrefix or root/pathPrefix
     // such as when you host on a subdomain like www.pathPrefix.domain.com
