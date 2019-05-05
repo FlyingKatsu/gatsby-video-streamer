@@ -181,7 +181,6 @@ query VideoBySlug($slug: String!, $avatar: String!) {
         }
         fields {
           slug
-          duration
           detail {
             html
             frontmatter {

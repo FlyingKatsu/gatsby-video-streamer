@@ -69,11 +69,11 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
                 })
             })
             // Create stubs for custom fields (to avoid unwanted errors)
-            createNodeField({ node, name: 'video_dash', value: 0})
-            createNodeField({ node, name: 'video_hls', value: 0})
-            createNodeField({ node, name: 'video_websafe', value: 0})
-            createNodeField({ node, name: 'video_other', value: 0})
-            createNodeField({ node, name: 'thumbnails', value: 0})
+            createNodeField({ node, name: 'video_dash', value: ''})
+            createNodeField({ node, name: 'video_hls', value: ''})
+            createNodeField({ node, name: 'video_websafe', value: []})
+            createNodeField({ node, name: 'video_other', value: []})
+            createNodeField({ node, name: 'thumbnails', value: []})
         }
         else if (node.fields.collection === NamingScheme.blog) {
             // page url will end with 'blog/filename/'
@@ -93,17 +93,18 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
         const relativeURL = createFilePath({ node, getNode });
         createNodeField({ node, name: 'slug', value: `/${NamingScheme.video}${relativeURL}` })
         // get length of video in seconds
-        if (node.relativePath) {
-            getVideoDurationInSeconds(`content/vid/${node.relativePath}`)
-                .then( duration =>
-                    createNodeField({ node, name: 'duration', value: duration})
-                ).catch( err => {
-                    console.error(err)
-                    createNodeField({ node, name: 'duration', value: 0})
-                });
-        } else {
-            createNodeField({ node, name: 'duration', value: 0})
-        }
+        // This seems to have broken since upgrading..? comment out for now
+        // if (node.relativePath) {
+        //     getVideoDurationInSeconds(`content/vid/${node.relativePath}`)
+        //         .then( duration =>
+        //             createNodeField({ node, name: 'duration', value: duration})
+        //         ).catch( err => {
+        //             console.error(err)
+        //             createNodeField({ node, name: 'duration', value: 0})
+        //         });
+        // } else {
+        //     createNodeField({ node, name: 'duration', value: 0})
+        // }
     }
     else {
         // Don't need any pages for any other files, but if you want them:

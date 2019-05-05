@@ -39,7 +39,7 @@ class PlaylistIndex extends React.Component {
                         link={ {path: video.fields.slug, name: ``} }
                         image={thumbs[thumbIndex]}
                         timeSince={video.frontmatter.date || vfile.mtime}
-                        duration={vfile.fields.duration || 0}
+                        duration={0}//{vfile.fields.duration || 0}
                         />
                     )
                 }
@@ -99,9 +99,6 @@ export const pageQuery = graphql`
                 }
                 video_websafe {
                   mtime(fromNow: true)
-                  fields {
-                    duration
-                  }
                 }
               }
             }
