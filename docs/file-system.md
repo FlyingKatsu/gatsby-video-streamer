@@ -4,6 +4,8 @@
 
 ## Development Files
 
+The content directory structure may change in a later version...
+
 ```
 gatsby-video-streamer/
     .gitignore
@@ -69,3 +71,5 @@ www/
         video/
         index.html
 ```
+
+where `public` is the directory created by running `gatsby build` in the repo

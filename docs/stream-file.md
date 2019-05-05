@@ -2,6 +2,8 @@
 
 # Stream File Generation
 
+Note that depending on [how your server is configured](/gatsby-video-streamer/deploy), these steps may not be necessary (as some modules handle the conversions themselves).
+
 ## Using OBS
 
 ### Any recorded video to MP4
