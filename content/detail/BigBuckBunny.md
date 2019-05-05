@@ -1,6 +1,6 @@
 ---
 title: Big Buck Bunny
-video_name: bunny
+video_name: BigBuckBunny
 thumb_dir: BigBuckBunny
 thumb_order: [8,2,4,7]
 tagged: [ dash, ad-free ]
