@@ -5,10 +5,12 @@
 !*.sample.*
 
 ## Big Content Files
-content/vid/
-content/video/
-content/img/
-content/image/
+*.mp4
+*.mov
+*.m4a
+*.ogg
+*.webm
+!BigBuckBunny.mp4
 
 ## == From Gatsby generated template ==
 
